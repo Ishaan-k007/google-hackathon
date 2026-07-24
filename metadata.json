@@ -1,0 +1,6 @@
+{
+  "name": "Zero FoodWastage",
+  "description": "Direct Supermarket Surplus Food Rescue & Charity Claiming Platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
