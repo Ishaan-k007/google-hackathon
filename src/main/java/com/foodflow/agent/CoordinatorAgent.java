@@ -241,7 +241,7 @@ public class CoordinatorAgent {
         emit(offset, AgentType.ROUTING, Severity.INFO, "Google AI Orchestrator: Evaluating travel distances using Google Maps API...");
         emit(offset, AgentType.ROUTING, Severity.SUCCESS, "Google Maps Matrix calculated: " + distanceMiles + " miles to " + charityName + " (" + travelTimeMins + " mins travel time).");
 
-        CharityRequest charity = charityRequestDatabase.findById(charityId);
+        CharityRequest charity = charityRequestDatabase.findById(charityId).orElse(null);
         if (charity == null) {
             // Fallback lookup by name or create a stub request
             charity = charityRequestDatabase.findAll().stream()
