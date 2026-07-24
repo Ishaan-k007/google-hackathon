@@ -11,7 +11,7 @@ import com.foodflow.model.SafetyCheckResult;
 import com.foodflow.model.Severity;
 import com.foodflow.service.GeminiService;
 import com.foodflow.store.AgentMessageStore;
-import com.foodflow.database.CharityRequestDatabase;
+import com.foodflow.store.CharityRequestStore;
 import com.foodflow.store.DonationStore;
 import com.foodflow.store.DriverStore;
 import com.foodflow.store.RescuePlanStore;
@@ -35,7 +35,7 @@ public class CoordinatorAgent {
     private static final long STEP_OFFSET_MS = 950;
 
     private final DonationStore donationStore;
-    private final CharityRequestDatabase charityRequestDatabase;
+    private final CharityRequestStore charityRequestStore;
     private final DriverStore driverStore;
     private final AgentMessageStore agentMessageStore;
     private final RescuePlanStore rescuePlanStore;
@@ -45,13 +45,13 @@ public class CoordinatorAgent {
     private final DriverAgent driverAgent;
     private final GeminiService geminiService;
 
-    public CoordinatorAgent(DonationStore donationStore, CharityRequestDatabase charityRequestDatabase,
+    public CoordinatorAgent(DonationStore donationStore, CharityRequestStore charityRequestStore,
                              DriverStore driverStore, AgentMessageStore agentMessageStore,
                              RescuePlanStore rescuePlanStore, RoutingMatchingAgent routingMatchingAgent,
                              SupermarketAgent supermarketAgent, CharityAgent charityAgent,
                              DriverAgent driverAgent, GeminiService geminiService) {
         this.donationStore = donationStore;
-        this.charityRequestDatabase = charityRequestDatabase;
+        this.charityRequestStore = charityRequestStore;
         this.driverStore = driverStore;
         this.agentMessageStore = agentMessageStore;
         this.rescuePlanStore = rescuePlanStore;
@@ -67,7 +67,7 @@ public class CoordinatorAgent {
         AtomicLong offset = new AtomicLong(START_OFFSET_MS);
 
         List<Donation> donations = donationStore.findAvailable();
-        List<CharityRequest> charities = charityRequestDatabase.findPending();
+        List<CharityRequest> charities = charityRequestStore.findPending();
         List<DriverAvailability> drivers = driverStore.findAvailable();
 
         if (donations.isEmpty() || charities.isEmpty()) {
@@ -208,9 +208,9 @@ public class CoordinatorAgent {
             d.setStatus(com.foodflow.model.DonationStatus.MATCHED);
             donationStore.save(d);
         });
-        charityRequestDatabase.findById(plan.getCharityRequestId()).ifPresent(c -> {
+        charityRequestStore.findById(plan.getCharityRequestId()).ifPresent(c -> {
             c.setStatus(com.foodflow.model.CharityStatus.MATCHED);
-            charityRequestDatabase.save(c);
+            charityRequestStore.save(c);
         });
         if (plan.getDriverAvailabilityId() != null) {
             driverStore.findById(plan.getDriverAvailabilityId()).ifPresent(dr -> {

@@ -38,8 +38,6 @@ public class CharityRequest {
 
     private String storageCapabilities;
     private boolean canCollect;
-    private String contactEmail;
-    private int maxCapacityItems;
     private String additionalNotes;
 
     @Builder.Default
