@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FoodFlow · Driver portal</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo">FF</span> FoodFlow</a>
+    <div class="nav-links">
+      <a href="/supermarket">🏪 Supermarket</a>
+      <a href="/charity">❤️ Charity</a>
+      <a class="current" href="/driver">🚗 Driver</a>
+      <a href="/dashboard">🧭 Dashboard</a>
+    </div>
+  </div>
+
+  <div class="wrap narrow">
+    <h1>Volunteer driver portal</h1>
+    <p class="subtitle">Offer delivery capacity. The Driver Agent will represent your availability in the FoodFlow negotiation.</p>
+
+    <div class="nl-box">
+      <div class="nl-label">✨ Describe it in your own words (optional)</div>
+      <textarea id="nlText" placeholder="e.g. I am available from 18:30, can carry 25 meals and can travel up to six miles.">I am available from 18:30, can carry 25 meals and can travel up to six miles.</textarea>
+      <div class="btn-row">
+        <button class="btn-gemini" id="interpretBtn" type="button">✨ Interpret with Gemini</button>
+        <span class="hint" id="interpretStatus"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Availability details</h2>
+      <form id="driverForm">
+        <label for="driverName">Driver name</label>
+        <input type="text" id="driverName" value="Alex" required>
+
+        <label for="startingLocation">Starting location</label>
+        <input type="text" id="startingLocation" value="Riverside Lane" required>
+
+        <div class="field-row">
+          <div>
+            <label for="availableFrom">Available from</label>
+            <input type="time" id="availableFrom" value="18:30" required>
+          </div>
+          <div>
+            <label for="availableUntil">Available until</label>
+            <input type="time" id="availableUntil" value="20:00">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label for="maximumDistanceMiles">Maximum travel distance (miles)</label>
+            <input type="number" id="maximumDistanceMiles" value="6" min="0" step="0.1" required>
+          </div>
+          <div>
+            <label for="capacityMeals">Maximum number of meals</label>
+            <input type="number" id="capacityMeals" value="25" min="1" required>
+          </div>
+        </div>
+
+        <label class="chip" style="margin-top:14px; width:fit-content;">
+          <input type="checkbox" id="hasInsulatedStorage" checked> Insulated / refrigerated storage available
+        </label>
+
+        <label for="additionalNotes">Additional notes</label>
+        <textarea id="additionalNotes" placeholder="Anything else the supermarket or charity should know"></textarea>
+
+        <div class="btn-row">
+          <button class="btn-primary btn-block" type="submit">Offer delivery</button>
+        </div>
+      </form>
+
+      <div id="statusLine" style="display:none;"></div>
+    </div>
+
+    <div id="feedCard" class="card" style="display:none;">
+      <h2>🚗 Driver Agent activity</h2>
+      <div class="feed" id="feed"></div>
+    </div>
+
+    <div id="planContainer"></div>
+  </div>
+
+  <script th:src="@{/js/common.js}" src="/js/common.js"></script>
+  <script th:src="@{/js/driver.js}" src="/js/driver.js"></script>
+</body>
+</html>

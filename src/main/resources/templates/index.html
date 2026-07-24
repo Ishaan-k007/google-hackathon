@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FoodFlow</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo">FF</span> FoodFlow</a>
+    <div class="nav-links">
+      <a href="/supermarket">🏪 Supermarket</a>
+      <a href="/charity">❤️ Charity</a>
+      <a href="/driver">🚗 Driver</a>
+      <a href="/dashboard">🧭 Dashboard</a>
+    </div>
+  </div>
+
+  <div class="wrap narrow" style="padding-top:48px;">
+    <h1 style="font-size:34px;">FoodFlow</h1>
+    <p class="subtitle" style="font-size:16px;">FoodFlow transforms disconnected food donations, charity needs and volunteer availability into one safe, actionable rescue plan. Independent AI agents interpret each request, negotiate the constraints, and a deterministic Safety Agent approves the final plan before food expires.</p>
+
+    <div class="card">
+      <h2>Run the demo</h2>
+      <p class="hint" style="margin-bottom:16px;">Open each portal in its own window (they'll open in a new tab) to mirror the live demo setup, then use the coordinator dashboard to run the negotiation.</p>
+      <div class="grid cols-2">
+        <a href="/supermarket" target="_blank"><button class="btn-secondary btn-block">🏪 Open Supermarket portal</button></a>
+        <a href="/charity" target="_blank"><button class="btn-secondary btn-block">❤️ Open Charity portal</button></a>
+        <a href="/driver" target="_blank"><button class="btn-secondary btn-block">🚗 Open Driver portal</button></a>
+        <a href="/dashboard" target="_blank"><button class="btn-primary btn-block">🧭 Open Coordinator dashboard</button></a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Quick reset</h2>
+      <p class="hint" style="margin-bottom:16px;">Clears every donation, request, driver, message and plan so the next run starts clean.</p>
+      <button class="btn-danger" id="resetBtn">↺ Reset demo</button>
+      <span class="hint" id="resetStatus" style="margin-left:10px;"></span>
+    </div>
+  </div>
+
+  <script th:src="@{/js/common.js}" src="/js/common.js"></script>
+  <script>
+    document.getElementById("resetBtn").addEventListener("click", async () => {
+      await api("/api/demo/reset", { method: "POST" });
+      document.getElementById("resetStatus").textContent = "Demo reset.";
+    });
+  </script>
+</body>
+</html>

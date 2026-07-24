@@ -1,0 +1,11 @@
+target/
+*.class
+.idea/
+*.iml
+.vscode/
+HELP.md
+.mvn/wrapper/maven-wrapper.jar
+
+# secrets - never commit
+application-local.properties
+.env

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FoodFlow · Coordinator dashboard</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo">FF</span> FoodFlow</a>
+    <div class="nav-links">
+      <a href="/supermarket">🏪 Supermarket</a>
+      <a href="/charity">❤️ Charity</a>
+      <a href="/driver">🚗 Driver</a>
+      <a class="current" href="/dashboard">🧭 Dashboard</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1>Coordinator dashboard</h1>
+    <p class="subtitle">Independent agents negotiate a safe, feasible rescue plan before the food expires.</p>
+
+    <div class="card">
+      <h2>Demo controls</h2>
+      <div class="demo-controls">
+        <button class="btn-secondary" id="loadSupermarketBtn">🏪 Load demo supermarket</button>
+        <button class="btn-secondary" id="loadCharityBtn">❤️ Load demo charity</button>
+        <button class="btn-secondary" id="loadDriverBtn">🚗 Load demo driver</button>
+        <button class="btn-primary" id="runNegotiationBtn">🧭 Run agent negotiation</button>
+        <button class="btn-danger" id="unsafeBtn">⚠️ Simulate unsafe match</button>
+        <button class="btn-secondary" id="resetBtn">↺ Reset demo</button>
+      </div>
+      <div id="dashboardStatus" class="hint" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="grid cols-3">
+      <div class="card" style="margin-bottom:0;">
+        <h2>🏪 Donation</h2>
+        <div id="donationMini"><div class="empty-state">No active donation yet.</div></div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <h2>❤️ Charity request</h2>
+        <div id="charityMini"><div class="empty-state">No active request yet.</div></div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <h2>🚗 Driver</h2>
+        <div id="driverMini"><div class="empty-state">No active driver yet.</div></div>
+      </div>
+    </div>
+
+    <div class="grid cols-2">
+      <div class="card">
+        <h2>Agent activity feed</h2>
+        <div class="feed" id="feed" style="max-height: 420px; overflow-y: auto;"></div>
+      </div>
+      <div class="card">
+        <h2>Safety checks</h2>
+        <div class="check-list" id="safetyChecks"><div class="empty-state">Run the negotiation to see safety checks.</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Final collection plan</h2>
+      <div id="planContainer"><div class="empty-state">No rescue plan yet. Load or submit a donation, charity request and driver, then run the negotiation.</div></div>
+    </div>
+
+    <div class="card">
+      <h2>Estimated social impact</h2>
+      <p class="hint" style="margin-top:-6px; margin-bottom:16px;">Estimates: one meal ≈ one person supported; one meal ≈ 0.6&nbsp;kg of food waste prevented.</p>
+      <div class="grid cols-4">
+        <div class="stat-tile accent-good">
+          <div class="label">Meals rescued</div>
+          <div class="value" id="statMeals">0</div>
+        </div>
+        <div class="stat-tile accent-accent">
+          <div class="label">Food waste prevented</div>
+          <div class="value"><span id="statWaste">0</span><span class="unit">kg</span></div>
+          <div class="estimate-note">Estimate</div>
+        </div>
+        <div class="stat-tile accent-gemini">
+          <div class="label">People supported</div>
+          <div class="value" id="statPeople">0</div>
+          <div class="estimate-note">Estimate</div>
+        </div>
+        <div class="stat-tile accent-accent">
+          <div class="label">Distance travelled</div>
+          <div class="value"><span id="statDistance">0</span><span class="unit">mi</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{/js/common.js}" src="/js/common.js"></script>
+  <script th:src="@{/js/dashboard.js}" src="/js/dashboard.js"></script>
+</body>
+</html>
