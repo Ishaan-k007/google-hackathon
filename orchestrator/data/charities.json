@@ -1,0 +1,42 @@
+[
+  {
+    "charity_id": "CHAR-001",
+    "charity_name": "Hackathon Hope Foodbank",
+    "location": "51.5313,-0.1261",
+    "contact_email": "hello@hackathonhope.org",
+    "requirements": {
+      "accepted_item_types": ["vegetarian_meal", "produce", "canned_goods"],
+      "max_capacity_items": 50,
+      "acceptable_allergens": ["none", "gluten", "dairy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": {
+        "opens_at": "16:00",
+        "closes_at": "20:30"
+      },
+      "transportation": {
+        "can_collect": true,
+        "max_collection_distance_miles": 5.0
+      }
+    }
+  },
+  {
+    "charity_id": "CHAR-002",
+    "charity_name": "Downtown Community Shelter",
+    "location": "51.5072,-0.1276",
+    "contact_email": "intake@downtownshelter.org",
+    "requirements": {
+      "accepted_item_types": ["dairy", "meat", "vegetarian_meal"],
+      "max_capacity_items": 15,
+      "acceptable_allergens": ["none"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": {
+        "opens_at": "09:00",
+        "closes_at": "19:00"
+      },
+      "transportation": {
+        "can_collect": false,
+        "max_collection_distance_miles": 0.0
+      }
+    }
+  }
+]
