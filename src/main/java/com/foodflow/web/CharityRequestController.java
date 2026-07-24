@@ -2,7 +2,7 @@ package com.foodflow.web;
 
 import com.foodflow.model.CharityRequest;
 import com.foodflow.service.IntakeService;
-import com.foodflow.store.CharityRequestStore;
+import com.foodflow.database.CharityRequestDatabase;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
@@ -12,11 +12,11 @@ import java.util.List;
 @RequestMapping("/api/charity-requests")
 public class CharityRequestController {
 
-    private final CharityRequestStore charityRequestStore;
+    private final CharityRequestDatabase charityRequestDatabase;
     private final IntakeService intakeService;
 
-    public CharityRequestController(CharityRequestStore charityRequestStore, IntakeService intakeService) {
-        this.charityRequestStore = charityRequestStore;
+    public CharityRequestController(CharityRequestDatabase charityRequestDatabase, IntakeService intakeService) {
+        this.charityRequestDatabase = charityRequestDatabase;
         this.intakeService = intakeService;
     }
 
@@ -27,7 +27,7 @@ public class CharityRequestController {
 
     @GetMapping
     public List<CharityRequest> list() {
-        return charityRequestStore.findAll().stream()
+        return charityRequestDatabase.findAll().stream()
                 .sorted(Comparator.comparing(CharityRequest::getCreatedAt).reversed())
                 .toList();
     }
