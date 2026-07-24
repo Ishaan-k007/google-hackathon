@@ -63,7 +63,7 @@ def generate_plan(prompt: str) -> dict:
     the Pydantic schema as the structured output.
     """
     response = client.models.generate_content(
-        model='gemini-2.5-pro',
+        model='gemini-3.5-flash',
         contents=prompt,
         config=types.GenerateContentConfig(
             system_instruction=system_instruction,
