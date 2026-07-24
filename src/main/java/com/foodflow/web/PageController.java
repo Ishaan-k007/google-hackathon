@@ -26,6 +26,11 @@ public class PageController {
         return "driver";
     }
 
+    @GetMapping("/vision")
+    public String vision() {
+        return "vision";
+    }
+
     @GetMapping("/dashboard")
     public String dashboard() {
         return "dashboard";

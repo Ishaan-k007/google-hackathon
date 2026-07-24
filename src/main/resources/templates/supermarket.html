@@ -13,103 +13,71 @@
       <a class="current" href="/supermarket">🏪 Supermarket</a>
       <a href="/charity">❤️ Charity</a>
       <a href="/driver">🚗 Driver</a>
+      <a href="/vision">📷 Food Vision</a>
       <a href="/dashboard">🧭 Dashboard</a>
     </div>
   </div>
 
   <div class="wrap narrow">
     <h1>Supermarket portal</h1>
-    <p class="subtitle">Offer surplus food. The Supermarket Agent will represent this donation in the FoodFlow negotiation.</p>
-
-    <div class="nl-box">
-      <div class="nl-label">✨ Describe it in your own words (optional)</div>
-      <textarea id="nlText" placeholder="e.g. We have 30 vegetarian pasta meals containing dairy. They are available from 18:00 and must be collected before 20:00.">We have 30 vegetarian pasta meals containing dairy. They are available from 18:00 and must be collected before 20:00.</textarea>
-      <div class="btn-row">
-        <button class="btn-gemini" id="interpretBtn" type="button">✨ Interpret with Gemini</button>
-        <span class="hint" id="interpretStatus"></span>
-      </div>
-    </div>
+    <p class="subtitle">Describe your surplus food in your own words. Gemini turns it into a structured donation record for FoodFlow's agentic workflow — and will ask if anything important is missing.</p>
 
     <div class="card">
-      <h2>Donation details</h2>
-      <form id="donationForm">
-        <label for="supermarketName">Supermarket name</label>
-        <input type="text" id="supermarketName" value="Green Market" required>
+      <h2>✨ Offer surplus food</h2>
+      <label for="nlText">What do you have?</label>
+      <textarea id="nlText" rows="5" placeholder="e.g. We have 30 vegetarian pasta meals containing dairy. They are available from 18:00 and must be collected before 20:00.">We have 30 vegetarian pasta meals containing dairy. They are available from 18:00 and must be collected before 20:00.</textarea>
 
-        <label for="pickupLocation">Pickup location</label>
-        <input type="text" id="pickupLocation" value="Green Market, 12 High Street" required>
+      <div class="btn-row">
+        <button class="btn-primary" id="submitBtn">Offer surplus food</button>
+      </div>
 
-        <label for="foodDescription">Food description</label>
-        <textarea id="foodDescription">Vegetarian pasta meals</textarea>
-
-        <div class="field-row">
-          <div>
-            <label for="quantity">Number of meals</label>
-            <input type="number" id="quantity" value="30" min="1" required>
-          </div>
-          <div>
-            <label for="storageType">Storage type</label>
-            <select id="storageType">
-              <option value="AMBIENT">Ambient</option>
-              <option value="CHILLED" selected>Chilled</option>
-              <option value="FROZEN">Frozen</option>
-            </select>
-          </div>
-        </div>
-
-        <label>Dietary category</label>
-        <div class="checkbox-group" id="dietaryTypes">
-          <label class="chip"><input type="checkbox" value="vegetarian" checked> Vegetarian</label>
-          <label class="chip"><input type="checkbox" value="vegan"> Vegan</label>
-          <label class="chip"><input type="checkbox" value="halal"> Halal</label>
-          <label class="chip"><input type="checkbox" value="kosher"> Kosher</label>
-          <label class="chip"><input type="checkbox" value="gluten-free"> Gluten-free</label>
-        </div>
-
-        <label>Known allergens (present in the food)</label>
-        <div class="checkbox-group" id="allergens">
-          <label class="chip"><input type="checkbox" value="dairy" checked> Dairy</label>
-          <label class="chip"><input type="checkbox" value="nuts"> Nuts</label>
-          <label class="chip"><input type="checkbox" value="gluten"> Gluten</label>
-          <label class="chip"><input type="checkbox" value="egg"> Egg</label>
-          <label class="chip"><input type="checkbox" value="soy"> Soy</label>
-          <label class="chip"><input type="checkbox" value="shellfish"> Shellfish</label>
-          <label class="chip"><input type="checkbox" value="sesame"> Sesame</label>
-        </div>
-        <p class="hint">Only tick allergens you can confirm are present. FoodFlow's Gemini agent will flag anything important that's left unconfirmed.</p>
-
-        <div class="field-row">
-          <div>
-            <label for="availableFrom">Available for collection from</label>
-            <input type="time" id="availableFrom" value="18:00" required>
-          </div>
-          <div>
-            <label for="expiresAt">Must be collected before (expiry)</label>
-            <input type="time" id="expiresAt" value="20:00" required>
-          </div>
-        </div>
-
-        <label for="additionalNotes">Additional notes</label>
-        <textarea id="additionalNotes" placeholder="Anything else the charity or driver should know"></textarea>
-
-        <div class="btn-row">
-          <button class="btn-primary btn-block" type="submit">Offer surplus food</button>
-        </div>
-      </form>
-
-      <div id="clarificationBanner" style="display:none;"></div>
       <div id="statusLine" style="display:none;"></div>
-    </div>
 
-    <div id="feedCard" class="card" style="display:none;">
-      <h2>🏪 Supermarket Agent activity</h2>
-      <div class="feed" id="feed"></div>
-    </div>
+      <div id="clarificationBox" class="clarification-banner" style="display:none; flex-direction:column; align-items:stretch; gap:10px;">
+        <div><span>✨</span> <strong>Gemini needs one more detail:</strong> <span id="clarificationQuestion"></span></div>
+        <textarea id="replyText" rows="2" placeholder="Type the missing detail here…"></textarea>
+        <div class="btn-row" style="margin-top:0;">
+          <button class="btn-gemini" id="sendReplyBtn">Send reply</button>
+        </div>
+      </div>
 
-    <div id="planContainer"></div>
+      <div id="resultBox" style="display:none; margin-top:18px;">
+        <div class="mini-card">
+          <div class="title">✅ Captured donation record</div>
+          <div class="sub" style="margin-bottom:10px;">This JSON is stored for FoodFlow's agentic workflow to pick up.</div>
+          <div id="resultJson"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" id="copyJsonBtn">Copy JSON</button>
+          <button class="btn-secondary" id="submitAnotherBtn">Offer another donation</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script th:src="@{/js/common.js}" src="/js/common.js"></script>
-  <script th:src="@{/js/supermarket.js}" src="/js/supermarket.js"></script>
+  <script>
+    const visionSummary = localStorage.getItem("foodflow.visionSummary");
+    if (visionSummary) {
+      document.getElementById("nlText").value = visionSummary;
+      localStorage.removeItem("foodflow.visionSummary");
+    }
+
+    initIntentPortal({
+      endpoint: "/api/intents/donor",
+      textareaId: "nlText",
+      submitBtnId: "submitBtn",
+      statusId: "statusLine",
+      postSuccessStatus: "Supermarket Agent is searching for suitable charities and transport.",
+      clarificationBoxId: "clarificationBox",
+      clarificationQuestionId: "clarificationQuestion",
+      replyTextId: "replyText",
+      sendReplyBtnId: "sendReplyBtn",
+      resultBoxId: "resultBox",
+      resultJsonId: "resultJson",
+      copyJsonBtnId: "copyJsonBtn",
+      submitAnotherBtnId: "submitAnotherBtn"
+    });
+  </script>
 </body>
 </html>

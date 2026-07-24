@@ -379,3 +379,22 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 .hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
 .section-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
 .demo-controls { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Food Vision capture */
+.vision-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  overflow: hidden;
+}
+.vision-frame video, .vision-frame img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+.vision-placeholder {
+  position: absolute; inset: 0;
+  color: var(--text-muted); font-size: 14px; display: flex; align-items: center; justify-content: center;
+}

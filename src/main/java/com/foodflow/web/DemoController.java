@@ -5,9 +5,11 @@ import com.foodflow.agent.NegotiationOutcome;
 import com.foodflow.service.DemoDataService;
 import com.foodflow.service.IntakeService;
 import com.foodflow.store.AgentMessageStore;
+import com.foodflow.store.AlertStore;
 import com.foodflow.store.CharityRequestStore;
 import com.foodflow.store.DonationStore;
 import com.foodflow.store.DriverStore;
+import com.foodflow.store.IntentStore;
 import com.foodflow.store.RescuePlanStore;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,11 +31,14 @@ public class DemoController {
     private final DriverStore driverStore;
     private final RescuePlanStore rescuePlanStore;
     private final AgentMessageStore agentMessageStore;
+    private final IntentStore intentStore;
+    private final AlertStore alertStore;
 
     public DemoController(DemoDataService demoDataService, IntakeService intakeService,
                            CoordinatorAgent coordinatorAgent, DonationStore donationStore,
                            CharityRequestStore charityRequestStore, DriverStore driverStore,
-                           RescuePlanStore rescuePlanStore, AgentMessageStore agentMessageStore) {
+                           RescuePlanStore rescuePlanStore, AgentMessageStore agentMessageStore,
+                           IntentStore intentStore, AlertStore alertStore) {
         this.demoDataService = demoDataService;
         this.intakeService = intakeService;
         this.coordinatorAgent = coordinatorAgent;
@@ -42,6 +47,8 @@ public class DemoController {
         this.driverStore = driverStore;
         this.rescuePlanStore = rescuePlanStore;
         this.agentMessageStore = agentMessageStore;
+        this.intentStore = intentStore;
+        this.alertStore = alertStore;
     }
 
     @PostMapping("/load")
@@ -61,6 +68,8 @@ public class DemoController {
         driverStore.clear();
         rescuePlanStore.clear();
         agentMessageStore.clear();
+        intentStore.clear();
+        alertStore.clear();
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("status", "reset");
         return response;

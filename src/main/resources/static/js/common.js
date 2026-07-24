@@ -140,6 +140,110 @@ function animateCountUp(el, target, decimals) {
   requestAnimationFrame(tick);
 }
 
+// Pretty-prints a JS object as a JSON code block.
+function renderJsonBlock(obj) {
+  return "<pre style=\"white-space:pre-wrap; word-break:break-word; margin:0; font-family:ui-monospace,Consolas,monospace; font-size:12.5px; line-height:1.6;\">"
+    + escapeHtml(JSON.stringify(obj, null, 2)) + "</pre>";
+}
+
+/**
+ * Drives the free-text -> Gemini -> structured-JSON flow shared by all three portals.
+ * Gemini decides whether the description has everything it needs; if not, it asks ONE
+ * clarification question, the user answers, and we resubmit once with final=true so the
+ * flow always terminates in at most two calls.
+ *
+ * config: {
+ *   endpoint, textareaId, submitBtnId, statusId, postSuccessStatus,
+ *   clarificationBoxId, clarificationQuestionId, replyTextId, sendReplyBtnId,
+ *   resultBoxId, resultJsonId, copyJsonBtnId, submitAnotherBtnId
+ * }
+ */
+function initIntentPortal(config) {
+  const els = {};
+  Object.keys(config).forEach(k => {
+    if (k.endsWith("Id")) els[k.slice(0, -2)] = document.getElementById(config[k]);
+  });
+
+  let originalText = "";
+
+  function reset() {
+    els.clarificationBox.style.display = "none";
+    els.resultBox.style.display = "none";
+    els.status.style.display = "none";
+    els.submitBtn.disabled = false;
+    els.textarea.disabled = false;
+  }
+
+  async function submit(text, isFinal) {
+    els.status.style.display = "flex";
+    els.status.className = "status-line pulse";
+    els.status.textContent = isFinal ? "Confirming the details with Gemini…" : "Gemini is reading your description…";
+    els.submitBtn.disabled = true;
+
+    try {
+      const result = await api(config.endpoint, {
+        method: "POST",
+        body: JSON.stringify({ text: text, final: isFinal })
+      });
+
+      if (!result.complete) {
+        els.status.style.display = "none";
+        els.clarificationBox.style.display = "flex";
+        els.clarificationQuestion.textContent = result.clarificationQuestion;
+        els.replyText.value = "";
+        els.replyText.focus();
+        els.submitBtn.disabled = false;
+        return;
+      }
+
+      els.clarificationBox.style.display = "none";
+      els.status.className = "status-line";
+      els.status.style.display = "flex";
+      els.status.textContent = config.postSuccessStatus;
+      els.resultBox.style.display = "block";
+      els.resultJson.innerHTML = renderJsonBlock(result.data);
+      els.submitBtn.disabled = false;
+    } catch (e) {
+      els.status.className = "status-line";
+      els.status.style.background = "var(--critical-soft)";
+      els.status.style.color = "var(--critical)";
+      els.status.textContent = "Something went wrong talking to Gemini: " + e.message;
+      els.submitBtn.disabled = false;
+    }
+  }
+
+  els.submitBtn.addEventListener("click", () => {
+    originalText = els.textarea.value;
+    els.resultBox.style.display = "none";
+    submit(originalText, false);
+  });
+
+  els.sendReplyBtn.addEventListener("click", () => {
+    const combined = originalText + "\n\nAdditional detail: " + els.replyText.value;
+    els.textarea.value = combined;
+    submit(combined, true);
+  });
+
+  if (els.copyJsonBtn) {
+    els.copyJsonBtn.addEventListener("click", () => {
+      const text = els.resultJson.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const original = els.copyJsonBtn.textContent;
+        els.copyJsonBtn.textContent = "Copied!";
+        setTimeout(() => { els.copyJsonBtn.textContent = original; }, 1500);
+      });
+    });
+  }
+
+  if (els.submitAnotherBtn) {
+    els.submitAnotherBtn.addEventListener("click", () => {
+      els.textarea.value = "";
+      els.textarea.focus();
+      reset();
+    });
+  }
+}
+
 // Polls GET /api/agent-messages and renders newly-revealed messages into feedEl.
 function startAgentFeedPolling(feedEl, onComplete) {
   let renderedCount = 0;
@@ -164,5 +268,37 @@ function startAgentFeedPolling(feedEl, onComplete) {
       console.error(e);
     }
   }, 500);
+  return timer;
+}
+
+function renderAlertCard(alert) {
+  const when = new Date(alert.createdAt);
+  const timeStr = isNaN(when.getTime()) ? "" : when.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  return '<div class="feed-msg agent-GEMINI" style="border-left-color: var(--good);">'
+    + '<div class="who" style="color: var(--good);">🔔 ' + escapeHtml(alert.foodbankName || "Foodbank alert")
+    + '<span style="margin-left:auto; font-weight:500; text-transform:none; color:var(--text-muted);">' + timeStr + '</span></div>'
+    + '<div class="body">' + escapeHtml(alert.message) + '</div>'
+    + '</div>';
+}
+
+// Polls GET /api/alerts/foodbank and re-renders the full list (newest first) into feedEl.
+function startAlertPolling(feedEl, emptyMessage) {
+  let lastRenderedIds = "";
+  feedEl.innerHTML = '<div class="feed-empty">' + (emptyMessage || "No alerts yet.") + '</div>';
+  const timer = setInterval(async () => {
+    try {
+      const alerts = await api("/api/alerts/foodbank");
+      const ids = alerts.map(a => a.id).join(",");
+      if (ids === lastRenderedIds) {
+        return;
+      }
+      lastRenderedIds = ids;
+      feedEl.innerHTML = alerts.length === 0
+        ? '<div class="feed-empty">' + (emptyMessage || "No alerts yet.") + '</div>'
+        : alerts.map(renderAlertCard).join("");
+    } catch (e) {
+      console.error(e);
+    }
+  }, 2000);
   return timer;
 }

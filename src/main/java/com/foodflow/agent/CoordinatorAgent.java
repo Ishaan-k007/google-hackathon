@@ -64,6 +64,18 @@ public class CoordinatorAgent {
 
     public NegotiationOutcome runNegotiation() {
         agentMessageStore.startNewRun();
+        try {
+            return doRunNegotiation();
+        } finally {
+            // Signals pollers that every message this run will ever produce has now been
+            // appended - see AgentMessageStore.isRunComplete() for why this matters: message
+            // emission can block for seconds on a real Gemini call (buildPlan -> explainMatch),
+            // so "no more messages are coming" cannot be inferred from elapsed time alone.
+            agentMessageStore.markRunFinished();
+        }
+    }
+
+    private NegotiationOutcome doRunNegotiation() {
         AtomicLong offset = new AtomicLong(START_OFFSET_MS);
 
         List<Donation> donations = donationStore.findAvailable();

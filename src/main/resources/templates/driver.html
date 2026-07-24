@@ -13,78 +13,65 @@
       <a href="/supermarket">🏪 Supermarket</a>
       <a href="/charity">❤️ Charity</a>
       <a class="current" href="/driver">🚗 Driver</a>
+      <a href="/vision">📷 Food Vision</a>
       <a href="/dashboard">🧭 Dashboard</a>
     </div>
   </div>
 
   <div class="wrap narrow">
     <h1>Volunteer driver portal</h1>
-    <p class="subtitle">Offer delivery capacity. The Driver Agent will represent your availability in the FoodFlow negotiation.</p>
-
-    <div class="nl-box">
-      <div class="nl-label">✨ Describe it in your own words (optional)</div>
-      <textarea id="nlText" placeholder="e.g. I am available from 18:30, can carry 25 meals and can travel up to six miles.">I am available from 18:30, can carry 25 meals and can travel up to six miles.</textarea>
-      <div class="btn-row">
-        <button class="btn-gemini" id="interpretBtn" type="button">✨ Interpret with Gemini</button>
-        <span class="hint" id="interpretStatus"></span>
-      </div>
-    </div>
+    <p class="subtitle">Describe your availability in your own words. Gemini turns it into a structured availability record for FoodFlow's agentic workflow — and will ask if anything important is missing.</p>
 
     <div class="card">
-      <h2>Availability details</h2>
-      <form id="driverForm">
-        <label for="driverName">Driver name</label>
-        <input type="text" id="driverName" value="Alex" required>
+      <h2>✨ Offer delivery</h2>
+      <label for="nlText">What can you do?</label>
+      <textarea id="nlText" rows="5" placeholder="e.g. I am available from 18:30, can carry 25 meals and can travel up to six miles.">I am available from 18:30, can carry 25 meals and can travel up to six miles.</textarea>
 
-        <label for="startingLocation">Starting location</label>
-        <input type="text" id="startingLocation" value="Riverside Lane" required>
-
-        <div class="field-row">
-          <div>
-            <label for="availableFrom">Available from</label>
-            <input type="time" id="availableFrom" value="18:30" required>
-          </div>
-          <div>
-            <label for="availableUntil">Available until</label>
-            <input type="time" id="availableUntil" value="20:00">
-          </div>
-        </div>
-
-        <div class="field-row">
-          <div>
-            <label for="maximumDistanceMiles">Maximum travel distance (miles)</label>
-            <input type="number" id="maximumDistanceMiles" value="6" min="0" step="0.1" required>
-          </div>
-          <div>
-            <label for="capacityMeals">Maximum number of meals</label>
-            <input type="number" id="capacityMeals" value="25" min="1" required>
-          </div>
-        </div>
-
-        <label class="chip" style="margin-top:14px; width:fit-content;">
-          <input type="checkbox" id="hasInsulatedStorage" checked> Insulated / refrigerated storage available
-        </label>
-
-        <label for="additionalNotes">Additional notes</label>
-        <textarea id="additionalNotes" placeholder="Anything else the supermarket or charity should know"></textarea>
-
-        <div class="btn-row">
-          <button class="btn-primary btn-block" type="submit">Offer delivery</button>
-        </div>
-      </form>
+      <div class="btn-row">
+        <button class="btn-primary" id="submitBtn">Offer delivery</button>
+      </div>
 
       <div id="statusLine" style="display:none;"></div>
-    </div>
 
-    <div id="feedCard" class="card" style="display:none;">
-      <h2>🚗 Driver Agent activity</h2>
-      <div class="feed" id="feed"></div>
-    </div>
+      <div id="clarificationBox" class="clarification-banner" style="display:none; flex-direction:column; align-items:stretch; gap:10px;">
+        <div><span>✨</span> <strong>Gemini needs one more detail:</strong> <span id="clarificationQuestion"></span></div>
+        <textarea id="replyText" rows="2" placeholder="Type the missing detail here…"></textarea>
+        <div class="btn-row" style="margin-top:0;">
+          <button class="btn-gemini" id="sendReplyBtn">Send reply</button>
+        </div>
+      </div>
 
-    <div id="planContainer"></div>
+      <div id="resultBox" style="display:none; margin-top:18px;">
+        <div class="mini-card">
+          <div class="title">✅ Captured availability record</div>
+          <div class="sub" style="margin-bottom:10px;">This JSON is stored for FoodFlow's agentic workflow to pick up.</div>
+          <div id="resultJson"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" id="copyJsonBtn">Copy JSON</button>
+          <button class="btn-secondary" id="submitAnotherBtn">Offer another delivery</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script th:src="@{/js/common.js}" src="/js/common.js"></script>
-  <script th:src="@{/js/driver.js}" src="/js/driver.js"></script>
+  <script>
+    initIntentPortal({
+      endpoint: "/api/intents/driver",
+      textareaId: "nlText",
+      submitBtnId: "submitBtn",
+      statusId: "statusLine",
+      postSuccessStatus: "Driver Agent is searching for a suitable collection.",
+      clarificationBoxId: "clarificationBox",
+      clarificationQuestionId: "clarificationQuestion",
+      replyTextId: "replyText",
+      sendReplyBtnId: "sendReplyBtn",
+      resultBoxId: "resultBox",
+      resultJsonId: "resultJson",
+      copyJsonBtnId: "copyJsonBtn",
+      submitAnotherBtnId: "submitAnotherBtn"
+    });
+  </script>
 </body>
 </html>

@@ -13,93 +13,72 @@
       <a href="/supermarket">🏪 Supermarket</a>
       <a class="current" href="/charity">❤️ Charity</a>
       <a href="/driver">🚗 Driver</a>
+      <a href="/vision">📷 Food Vision</a>
       <a href="/dashboard">🧭 Dashboard</a>
     </div>
   </div>
 
   <div class="wrap narrow">
     <h1>Charity portal</h1>
-    <p class="subtitle">Request food. The Charity Agent will represent these needs in the FoodFlow negotiation.</p>
+    <p class="subtitle">Describe what you need in your own words. Gemini turns it into a structured request record for FoodFlow's agentic workflow — and will ask if anything important is missing.</p>
 
-    <div class="nl-box">
-      <div class="nl-label">✨ Describe it in your own words (optional)</div>
-      <textarea id="nlText" placeholder="e.g. We need around 20 vegetarian evening meals before 19:30. We cannot accept nuts and do not have anyone available to collect.">We need around 20 vegetarian evening meals before 19:30. We cannot accept nuts and do not have anyone available to collect.</textarea>
-      <div class="btn-row">
-        <button class="btn-gemini" id="interpretBtn" type="button">✨ Interpret with Gemini</button>
-        <span class="hint" id="interpretStatus"></span>
-      </div>
-      <div id="constraintsPreview"></div>
+    <div class="card">
+      <h2>🔔 Foodbank alerts</h2>
+      <p class="hint" style="margin-top:-4px; margin-bottom:14px;">Live updates from FoodFlow's agentic workflow when a match involving your foodbank is arranged.</p>
+      <div class="feed" id="alertFeed"></div>
     </div>
 
     <div class="card">
-      <h2>Request details</h2>
-      <form id="charityForm">
-        <label for="charityName">Charity name</label>
-        <input type="text" id="charityName" value="Hope Community Kitchen" required>
+      <h2>✨ Request food</h2>
+      <label for="nlText">What do you need?</label>
+      <textarea id="nlText" rows="5" placeholder="e.g. We need around 20 vegetarian evening meals before 19:30. We cannot accept nuts and do not have anyone available to collect.">We need around 20 vegetarian evening meals before 19:30. We cannot accept nuts and do not have anyone available to collect.</textarea>
 
-        <label for="deliveryLocation">Delivery location</label>
-        <input type="text" id="deliveryLocation" value="Hope Community Kitchen, 45 Elm Road" required>
-
-        <label for="requestedQuantity">Number of meals requested</label>
-        <input type="number" id="requestedQuantity" value="20" min="1" required>
-
-        <label>Accepted dietary categories</label>
-        <div class="checkbox-group" id="acceptedDietaryTypes">
-          <label class="chip"><input type="checkbox" value="vegetarian" checked> Vegetarian</label>
-          <label class="chip"><input type="checkbox" value="vegan"> Vegan</label>
-          <label class="chip"><input type="checkbox" value="halal"> Halal</label>
-          <label class="chip"><input type="checkbox" value="kosher"> Kosher</label>
-          <label class="chip"><input type="checkbox" value="gluten-free"> Gluten-free</label>
-        </div>
-
-        <label>Allergens it cannot accept (hard constraint)</label>
-        <div class="checkbox-group" id="rejectedAllergens">
-          <label class="chip"><input type="checkbox" value="dairy"> Dairy</label>
-          <label class="chip"><input type="checkbox" value="nuts" checked> Nuts</label>
-          <label class="chip"><input type="checkbox" value="gluten"> Gluten</label>
-          <label class="chip"><input type="checkbox" value="egg"> Egg</label>
-          <label class="chip"><input type="checkbox" value="soy"> Soy</label>
-          <label class="chip"><input type="checkbox" value="shellfish"> Shellfish</label>
-          <label class="chip"><input type="checkbox" value="sesame"> Sesame</label>
-        </div>
-
-        <div class="field-row">
-          <div>
-            <label for="latestDeliveryTime">Latest delivery time</label>
-            <input type="time" id="latestDeliveryTime" value="19:30" required>
-          </div>
-          <div>
-            <label for="storageCapabilities">Storage capabilities</label>
-            <input type="text" id="storageCapabilities" value="Fridge available on site">
-          </div>
-        </div>
-
-        <label>Can collect?</label>
-        <div class="radio-row">
-          <label><input type="radio" name="canCollect" value="yes"> Yes</label>
-          <label><input type="radio" name="canCollect" value="no" checked> No</label>
-        </div>
-
-        <label for="additionalNotes">Additional notes</label>
-        <textarea id="additionalNotes" placeholder="Anything else the supermarket or driver should know"></textarea>
-
-        <div class="btn-row">
-          <button class="btn-primary btn-block" type="submit">Request food</button>
-        </div>
-      </form>
+      <div class="btn-row">
+        <button class="btn-primary" id="submitBtn">Request food</button>
+      </div>
 
       <div id="statusLine" style="display:none;"></div>
-    </div>
 
-    <div id="feedCard" class="card" style="display:none;">
-      <h2>❤️ Charity Agent activity</h2>
-      <div class="feed" id="feed"></div>
-    </div>
+      <div id="clarificationBox" class="clarification-banner" style="display:none; flex-direction:column; align-items:stretch; gap:10px;">
+        <div><span>✨</span> <strong>Gemini needs one more detail:</strong> <span id="clarificationQuestion"></span></div>
+        <textarea id="replyText" rows="2" placeholder="Type the missing detail here…"></textarea>
+        <div class="btn-row" style="margin-top:0;">
+          <button class="btn-gemini" id="sendReplyBtn">Send reply</button>
+        </div>
+      </div>
 
-    <div id="planContainer"></div>
+      <div id="resultBox" style="display:none; margin-top:18px;">
+        <div class="mini-card">
+          <div class="title">✅ Captured request record</div>
+          <div class="sub" style="margin-bottom:10px;">This JSON is stored for FoodFlow's agentic workflow to pick up.</div>
+          <div id="resultJson"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" id="copyJsonBtn">Copy JSON</button>
+          <button class="btn-secondary" id="submitAnotherBtn">Request more food</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script th:src="@{/js/common.js}" src="/js/common.js"></script>
-  <script th:src="@{/js/charity.js}" src="/js/charity.js"></script>
+  <script>
+    initIntentPortal({
+      endpoint: "/api/intents/charity",
+      textareaId: "nlText",
+      submitBtnId: "submitBtn",
+      statusId: "statusLine",
+      postSuccessStatus: "Charity Agent is looking for a compatible donation.",
+      clarificationBoxId: "clarificationBox",
+      clarificationQuestionId: "clarificationQuestion",
+      replyTextId: "replyText",
+      sendReplyBtnId: "sendReplyBtn",
+      resultBoxId: "resultBox",
+      resultJsonId: "resultJson",
+      copyJsonBtnId: "copyJsonBtn",
+      submitAnotherBtnId: "submitAnotherBtn"
+    });
+    startAlertPolling(document.getElementById("alertFeed"), "No alerts yet — you'll see a message here as soon as a match is arranged.");
+  </script>
 </body>
 </html>

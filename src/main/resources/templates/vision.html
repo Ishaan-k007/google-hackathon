@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FoodFlow · Food Vision</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo">FF</span> FoodFlow</a>
+    <div class="nav-links">
+      <a href="/supermarket">🏪 Supermarket</a>
+      <a href="/charity">❤️ Charity</a>
+      <a href="/driver">🚗 Driver</a>
+      <a class="current" href="/vision">📷 Food Vision</a>
+      <a href="/dashboard">🧭 Dashboard</a>
+    </div>
+  </div>
+
+  <div class="wrap narrow">
+    <h1>Food Vision</h1>
+    <p class="subtitle">Point your camera at surplus food and Gemini Vision will identify what's there — item type, likely allergens and dietary tags — ready to drop straight into the Supermarket portal.</p>
+
+    <div class="card">
+      <h2>📷 Capture a photo</h2>
+
+      <div id="cameraStage">
+        <div class="vision-frame">
+          <video id="cameraVideo" autoplay playsinline muted style="display:none;"></video>
+          <img id="capturedImg" style="display:none;">
+          <div id="cameraPlaceholder" class="vision-placeholder">Camera is off</div>
+        </div>
+        <canvas id="captureCanvas" style="display:none;"></canvas>
+
+        <div class="btn-row">
+          <button class="btn-secondary" id="startCameraBtn">▶️ Start camera</button>
+          <button class="btn-primary" id="captureBtn" style="display:none;">📸 Capture photo</button>
+          <button class="btn-secondary" id="retakeBtn" style="display:none;">↺ Retake</button>
+          <label class="btn-secondary" id="uploadLabel" for="fileInput" style="display:inline-flex; align-items:center;">🖼️ Upload a photo instead</label>
+          <input type="file" id="fileInput" accept="image/*" style="display:none;">
+        </div>
+        <div class="hint" id="cameraHint" style="display:none;"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-gemini" id="analyzeBtn" style="display:none;">✨ Identify food with Gemini Vision</button>
+      </div>
+
+      <div id="statusLine" style="display:none;"></div>
+
+      <div id="resultBox" style="display:none; margin-top:18px;">
+        <div class="nl-box">
+          <div class="nl-label">✨ Gemini's summary</div>
+          <div id="visionSummary" style="font-size:14px;"></div>
+        </div>
+
+        <div id="itemsList" style="display:flex; flex-direction:column; gap:10px;"></div>
+
+        <div class="btn-row">
+          <button class="btn-primary" id="useInSupermarketBtn">🏪 Use this in Supermarket portal</button>
+          <button class="btn-secondary" id="analyzeAnotherBtn">Analyze another photo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script th:src="@{/js/common.js}" src="/js/common.js"></script>
+  <script>
+    const video = document.getElementById("cameraVideo");
+    const capturedImg = document.getElementById("capturedImg");
+    const placeholder = document.getElementById("cameraPlaceholder");
+    const canvas = document.getElementById("captureCanvas");
+    const startCameraBtn = document.getElementById("startCameraBtn");
+    const captureBtn = document.getElementById("captureBtn");
+    const retakeBtn = document.getElementById("retakeBtn");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const fileInput = document.getElementById("fileInput");
+    const cameraHint = document.getElementById("cameraHint");
+    const statusLine = document.getElementById("statusLine");
+    const resultBox = document.getElementById("resultBox");
+    const itemsList = document.getElementById("itemsList");
+    const visionSummary = document.getElementById("visionSummary");
+
+    let stream = null;
+    let capturedImage = null; // { base64, mimeType }
+
+    function showHint(text) {
+      cameraHint.style.display = text ? "block" : "none";
+      cameraHint.textContent = text || "";
+    }
+
+    function showStatus(text, isError) {
+      statusLine.style.display = text ? "flex" : "none";
+      statusLine.className = "status-line" + (isError ? "" : " pulse");
+      if (isError) {
+        statusLine.style.background = "var(--critical-soft)";
+        statusLine.style.color = "var(--critical)";
+      } else {
+        statusLine.style.background = "";
+        statusLine.style.color = "";
+      }
+      statusLine.textContent = text || "";
+    }
+
+    async function startCamera() {
+      showHint("");
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+        video.srcObject = stream;
+        video.style.display = "block";
+        capturedImg.style.display = "none";
+        placeholder.style.display = "none";
+        startCameraBtn.style.display = "none";
+        captureBtn.style.display = "inline-flex";
+        retakeBtn.style.display = "none";
+        analyzeBtn.style.display = "none";
+        resultBox.style.display = "none";
+      } catch (e) {
+        showHint("Couldn't access the camera (" + e.message + "). Use \"Upload a photo instead\".");
+      }
+    }
+
+    function stopCamera() {
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        stream = null;
+      }
+    }
+
+    function setCapturedFromDataUrl(dataUrl) {
+      const match = /^data:(.+);base64,(.*)$/.exec(dataUrl);
+      if (!match) return;
+      capturedImage = { mimeType: match[1], base64: match[2] };
+      capturedImg.src = dataUrl;
+      capturedImg.style.display = "block";
+      video.style.display = "none";
+      placeholder.style.display = "none";
+      stopCamera();
+      startCameraBtn.style.display = "none";
+      captureBtn.style.display = "none";
+      retakeBtn.style.display = "inline-flex";
+      analyzeBtn.style.display = "inline-flex";
+      resultBox.style.display = "none";
+      showStatus("");
+    }
+
+    captureBtn.addEventListener("click", () => {
+      const maxWidth = 900;
+      const scale = Math.min(1, maxWidth / video.videoWidth);
+      canvas.width = video.videoWidth * scale;
+      canvas.height = video.videoHeight * scale;
+      canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+      setCapturedFromDataUrl(canvas.toDataURL("image/jpeg", 0.85));
+    });
+
+    startCameraBtn.addEventListener("click", startCamera);
+
+    retakeBtn.addEventListener("click", () => {
+      capturedImage = null;
+      placeholder.style.display = "flex";
+      capturedImg.style.display = "none";
+      retakeBtn.style.display = "none";
+      analyzeBtn.style.display = "none";
+      startCameraBtn.style.display = "inline-flex";
+      resultBox.style.display = "none";
+      showStatus("");
+    });
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => setCapturedFromDataUrl(reader.result);
+      reader.readAsDataURL(file);
+    });
+
+    function categoryLabel(cat) {
+      return (cat || "item").replace(/_/g, " ");
+    }
+
+    function renderVisionItem(item) {
+      const pct = item.confidence !== null && item.confidence !== undefined ? Math.round(item.confidence * 100) : null;
+      const dietary = (item.dietaryTypes || []).map(d =>
+        '<span class="badge badge-success">' + escapeHtml(d.replace(/_/g, " ")) + '</span>').join(" ");
+      const allergens = (item.likelyAllergens || []).map(a =>
+        '<span class="badge badge-warning">' + escapeHtml(a.replace(/_/g, " ")) + '</span>').join(" ");
+      return '<div class="mini-card">'
+        + '<div class="title">' + escapeHtml(item.name || "Unidentified item") + '</div>'
+        + '<div class="sub">' + escapeHtml(categoryLabel(item.category))
+        + (item.estimatedQuantity ? " · ~" + item.estimatedQuantity + " visible" : "")
+        + (pct !== null ? " · " + pct + "% confident" : "") + '</div>'
+        + (dietary || allergens ? '<div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;">' + dietary + allergens + '</div>' : '')
+        + '</div>';
+    }
+
+    analyzeBtn.addEventListener("click", async () => {
+      if (!capturedImage) return;
+      analyzeBtn.disabled = true;
+      showStatus("Gemini Vision is looking at your photo…");
+      resultBox.style.display = "none";
+
+      try {
+        const result = await api("/api/vision/analyze-food", {
+          method: "POST",
+          body: JSON.stringify({ imageBase64: capturedImage.base64, mimeType: capturedImage.mimeType })
+        });
+
+        if (!result.success) {
+          showStatus(result.error || "Gemini couldn't analyze that photo.", true);
+          analyzeBtn.disabled = false;
+          return;
+        }
+
+        showStatus("");
+        visionSummary.textContent = result.summary || "";
+        itemsList.innerHTML = (result.items || []).map(renderVisionItem).join("")
+          || '<div class="empty-state">No individual items identified.</div>';
+        resultBox.style.display = "block";
+        resultBox.dataset.summary = result.summary || "";
+        analyzeBtn.disabled = false;
+      } catch (e) {
+        showStatus("Something went wrong talking to Gemini: " + e.message, true);
+        analyzeBtn.disabled = false;
+      }
+    });
+
+    document.getElementById("useInSupermarketBtn").addEventListener("click", () => {
+      localStorage.setItem("foodflow.visionSummary", resultBox.dataset.summary || "");
+      window.location.href = "/supermarket";
+    });
+
+    document.getElementById("analyzeAnotherBtn").addEventListener("click", () => {
+      capturedImage = null;
+      capturedImg.style.display = "none";
+      placeholder.style.display = "flex";
+      resultBox.style.display = "none";
+      analyzeBtn.style.display = "none";
+      retakeBtn.style.display = "none";
+      startCameraBtn.style.display = "inline-flex";
+      fileInput.value = "";
+      showStatus("");
+    });
+  </script>
+</body>
+</html>
