@@ -1,10 +1,18 @@
-from google.cloud.aiplatform import adk
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import os
 
+from google import genai
+from google.genai import types
+from dotenv import load_dotenv
+
 from tools.db_tool import fetch_charities_tool
 from tools.maps_tool import calculate_travel_times_tool
+
+load_dotenv()
+
+# We will initialize the client explicitly using the API key from .env
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
 # Pydantic schemas for structured output
 
@@ -33,8 +41,6 @@ class DistributionPlanSchema(BaseModel):
     allocations: List[CharityAllocation] = Field(description="List of charities and their allocations")
     unallocated_items: List[UnallocatedItem] = Field(description="Items that could not be matched")
 
-model = adk.GenerativeModel(model_name="gemini-1.5-pro")
-
 system_instruction = """
 You are an autonomous logistics coordinator for a food rescue operation. 
 Your goal is to distribute 100% of the given supermarket surplus to valid charities.
@@ -51,11 +57,23 @@ Workflow:
 5. Format the result strictly to the provided output schema. Do NOT hallucinate logistics, use the data from the tools.
 """
 
-orchestrator_agent = adk.Agent(
-    name="FoodRescueOrchestrator",
-    description="Orchestrates logistics to distribute food surplus to charities.",
-    model=model,
-    tools=[fetch_charities_tool, calculate_travel_times_tool],
-    system_instruction=system_instruction,
-    response_schema=DistributionPlanSchema
-)
+def generate_plan(prompt: str) -> dict:
+    """
+    Calls the Gemini API using the new genai client, passing the tools and forcing 
+    the Pydantic schema as the structured output.
+    """
+    response = client.models.generate_content(
+        model='gemini-2.5-pro',
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            system_instruction=system_instruction,
+            tools=[fetch_charities_tool, calculate_travel_times_tool],
+            response_mime_type="application/json",
+            response_schema=DistributionPlanSchema,
+            temperature=0.1
+        )
+    )
+    
+    import json
+    return json.loads(response.text)
+

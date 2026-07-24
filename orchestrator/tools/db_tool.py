@@ -1,11 +1,6 @@
 import json
 import os
-from google.cloud.aiplatform import adk
 
-@adk.tool(
-    name="fetch_charities_tool",
-    description="Fetches a list of all registered charities and their requirements from the database. Use this to find potential matches for surplus food."
-)
 def fetch_charities_tool() -> list:
     """
     Returns a list of dictionaries containing charity information, their locations,

@@ -1,6 +1,5 @@
 import os
 import googlemaps
-from google.cloud.aiplatform import adk
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -8,10 +7,6 @@ load_dotenv()
 GMAPS_KEY = os.environ.get("GOOGLE_MAPS_API_KEY")
 gmaps = googlemaps.Client(key=GMAPS_KEY) if GMAPS_KEY else None
 
-@adk.tool(
-    name="calculate_travel_times_tool",
-    description="Calculates real-world driving distance and travel time from an origin to a list of destinations. Use this to verify if food can be delivered or collected within expiration limits and charity operating hours."
-)
 def calculate_travel_times_tool(origin: str, destinations: list[str]) -> dict:
     """
     Calculates distance and travel time.
