@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FoodFlow · Charity portal</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <a class="brand" href="/"><span class="logo">FF</span> FoodFlow</a>
+    <div class="nav-links">
+      <a href="/supermarket">🏪 Supermarket</a>
+      <a class="current" href="/charity">❤️ Charity</a>
+      <a href="/driver">🚗 Driver</a>
+      <a href="/dashboard">🧭 Dashboard</a>
+    </div>
+  </div>
+
+  <div class="wrap narrow">
+    <h1>Charity portal</h1>
+    <p class="subtitle">Request food. The Charity Agent will represent these needs in the FoodFlow negotiation.</p>
+
+    <div class="nl-box">
+      <div class="nl-label">✨ Describe it in your own words (optional)</div>
+      <textarea id="nlText" placeholder="e.g. We need around 20 vegetarian evening meals before 19:30. We cannot accept nuts and do not have anyone available to collect.">We need around 20 vegetarian evening meals before 19:30. We cannot accept nuts and do not have anyone available to collect.</textarea>
+      <div class="btn-row">
+        <button class="btn-gemini" id="interpretBtn" type="button">✨ Interpret with Gemini</button>
+        <span class="hint" id="interpretStatus"></span>
+      </div>
+      <div id="constraintsPreview"></div>
+    </div>
+
+    <div class="card">
+      <h2>Request details</h2>
+      <form id="charityForm">
+        <label for="charityName">Charity name</label>
+        <input type="text" id="charityName" value="Hope Community Kitchen" required>
+
+        <label for="deliveryLocation">Delivery location</label>
+        <input type="text" id="deliveryLocation" value="Hope Community Kitchen, 45 Elm Road" required>
+
+        <label for="requestedQuantity">Number of meals requested</label>
+        <input type="number" id="requestedQuantity" value="20" min="1" required>
+
+        <label>Accepted dietary categories</label>
+        <div class="checkbox-group" id="acceptedDietaryTypes">
+          <label class="chip"><input type="checkbox" value="vegetarian" checked> Vegetarian</label>
+          <label class="chip"><input type="checkbox" value="vegan"> Vegan</label>
+          <label class="chip"><input type="checkbox" value="halal"> Halal</label>
+          <label class="chip"><input type="checkbox" value="kosher"> Kosher</label>
+          <label class="chip"><input type="checkbox" value="gluten-free"> Gluten-free</label>
+        </div>
+
+        <label>Allergens it cannot accept (hard constraint)</label>
+        <div class="checkbox-group" id="rejectedAllergens">
+          <label class="chip"><input type="checkbox" value="dairy"> Dairy</label>
+          <label class="chip"><input type="checkbox" value="nuts" checked> Nuts</label>
+          <label class="chip"><input type="checkbox" value="gluten"> Gluten</label>
+          <label class="chip"><input type="checkbox" value="egg"> Egg</label>
+          <label class="chip"><input type="checkbox" value="soy"> Soy</label>
+          <label class="chip"><input type="checkbox" value="shellfish"> Shellfish</label>
+          <label class="chip"><input type="checkbox" value="sesame"> Sesame</label>
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label for="latestDeliveryTime">Latest delivery time</label>
+            <input type="time" id="latestDeliveryTime" value="19:30" required>
+          </div>
+          <div>
+            <label for="storageCapabilities">Storage capabilities</label>
+            <input type="text" id="storageCapabilities" value="Fridge available on site">
+          </div>
+        </div>
+
+        <label>Can collect?</label>
+        <div class="radio-row">
+          <label><input type="radio" name="canCollect" value="yes"> Yes</label>
+          <label><input type="radio" name="canCollect" value="no" checked> No</label>
+        </div>
+
+        <label for="additionalNotes">Additional notes</label>
+        <textarea id="additionalNotes" placeholder="Anything else the supermarket or driver should know"></textarea>
+
+        <div class="btn-row">
+          <button class="btn-primary btn-block" type="submit">Request food</button>
+        </div>
+      </form>
+
+      <div id="statusLine" style="display:none;"></div>
+    </div>
+
+    <div id="feedCard" class="card" style="display:none;">
+      <h2>❤️ Charity Agent activity</h2>
+      <div class="feed" id="feed"></div>
+    </div>
+
+    <div id="planContainer"></div>
+  </div>
+
+  <script th:src="@{/js/common.js}" src="/js/common.js"></script>
+  <script th:src="@{/js/charity.js}" src="/js/charity.js"></script>
+</body>
+</html>
