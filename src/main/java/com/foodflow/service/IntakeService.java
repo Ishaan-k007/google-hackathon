@@ -6,7 +6,7 @@ import com.foodflow.model.Donation;
 import com.foodflow.model.DonationStatus;
 import com.foodflow.model.DriverAvailability;
 import com.foodflow.model.DriverStatus;
-import com.foodflow.store.CharityRequestStore;
+import com.foodflow.database.CharityRequestDatabase;
 import com.foodflow.store.DonationStore;
 import com.foodflow.store.DriverStore;
 import org.springframework.stereotype.Service;
@@ -19,14 +19,14 @@ import java.util.UUID;
 public class IntakeService {
 
     private final DonationStore donationStore;
-    private final CharityRequestStore charityRequestStore;
+    private final CharityRequestDatabase charityRequestDatabase;
     private final DriverStore driverStore;
     private final GeminiService geminiService;
 
-    public IntakeService(DonationStore donationStore, CharityRequestStore charityRequestStore,
+    public IntakeService(DonationStore donationStore, CharityRequestDatabase charityRequestDatabase,
                           DriverStore driverStore, GeminiService geminiService) {
         this.donationStore = donationStore;
-        this.charityRequestStore = charityRequestStore;
+        this.charityRequestDatabase = charityRequestDatabase;
         this.driverStore = driverStore;
         this.geminiService = geminiService;
     }
@@ -43,7 +43,7 @@ public class IntakeService {
         charityRequest.setId(UUID.randomUUID().toString());
         charityRequest.setCreatedAt(Instant.now());
         charityRequest.setStatus(CharityStatus.PENDING);
-        return charityRequestStore.save(charityRequest);
+        return charityRequestDatabase.save(charityRequest);
     }
 
     public DriverAvailability intake(DriverAvailability driver) {

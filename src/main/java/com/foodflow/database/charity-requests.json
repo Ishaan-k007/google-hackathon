@@ -1,0 +1,422 @@
+[
+  {
+    "charity_id": "CHAR-001",
+    "charity_name": "Hackathon Hope Foodbank",
+    "location": "51.5313,-0.1261",
+    "contact_email": "hello@hackathonhope.org",
+    "requirements": {
+      "accepted_item_types": ["vegetarian_meal", "produce", "canned_goods"],
+      "max_capacity_items": 50,
+      "acceptable_allergens": ["none", "gluten", "dairy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "16:00", "closes_at": "20:30" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 5.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-002",
+    "charity_name": "Ace of Clubs London",
+    "location": "51.4646,-0.1332",
+    "contact_email": "info@aceofclubs.org.uk",
+    "requirements": {
+      "accepted_item_types": ["fresh_produce", "bakery", "prepared_meal"],
+      "max_capacity_items": 60,
+      "acceptable_allergens": ["none", "soy", "peanut_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "15:00", "closes_at": "20:00" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-003",
+    "charity_name": "Waterloo Foodbank",
+    "location": "51.5003,-0.1086",
+    "contact_email": "foodbank@oasiswaterloo.org",
+    "requirements": {
+      "accepted_item_types": ["canned_goods", "dry_goods", "vegetarian_meal"],
+      "max_capacity_items": 100,
+      "acceptable_allergens": ["none", "dairy_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "14:00", "closes_at": "19:30" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 8.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-004",
+    "charity_name": "ARC Food Bank Islington",
+    "location": "51.5434,-0.0934",
+    "contact_email": "info@the-arc.org",
+    "requirements": {
+      "accepted_item_types": ["canned_goods", "produce", "dairy"],
+      "max_capacity_items": 40,
+      "acceptable_allergens": ["gluten", "dairy"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "17:30", "closes_at": "21:00" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-005",
+    "charity_name": "Hackney Foodbank",
+    "location": "51.5458,-0.0573",
+    "contact_email": "info@hackney.foodbank.org.uk",
+    "requirements": {
+      "accepted_item_types": ["produce", "vegetarian_meal", "bakery"],
+      "max_capacity_items": 70,
+      "acceptable_allergens": ["none", "nut_free"],
+      "storage_capabilities": ["ambient", "refrigerated", "frozen"],
+      "operating_hours": { "opens_at": "15:00", "closes_at": "19:00" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 6.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-006",
+    "charity_name": "Brixton Soup Kitchen",
+    "location": "51.4616,-0.1118",
+    "contact_email": "brixtonsoupkitchen@gmail.com",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "bakery", "canned_goods"],
+      "max_capacity_items": 55,
+      "acceptable_allergens": ["gluten_free", "dairy_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "16:30", "closes_at": "20:00" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 10.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-007",
+    "charity_name": "Hammersmith & Fulham Foodbank",
+    "location": "51.4820,-0.2100",
+    "contact_email": "info@hffoodbank.org.uk",
+    "requirements": {
+      "accepted_item_types": ["produce", "canned_goods"],
+      "max_capacity_items": 80,
+      "acceptable_allergens": ["none", "soy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "14:30", "closes_at": "18:30" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-008",
+    "charity_name": "Islington Foodbank",
+    "location": "51.5362,-0.1027",
+    "contact_email": "info@islington.foodbank.org.uk",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "vegetarian_meal", "produce"],
+      "max_capacity_items": 65,
+      "acceptable_allergens": ["none", "peanut_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "17:00", "closes_at": "21:00" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 4.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-009",
+    "charity_name": "Southwark Foodbank",
+    "location": "51.4789,-0.0682",
+    "contact_email": "foodbank.support@pecan.org.uk",
+    "requirements": {
+      "accepted_item_types": ["canned_goods", "dry_goods", "bakery"],
+      "max_capacity_items": 90,
+      "acceptable_allergens": ["none", "dairy_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "15:30", "closes_at": "18:45" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 7.5 }
+    }
+  },
+  {
+    "charity_id": "CHAR-010",
+    "charity_name": "North Paddington Foodbank",
+    "location": "51.5235,-0.1983",
+    "contact_email": "info@npfoodbank.org.uk",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "canned_goods"],
+      "max_capacity_items": 45,
+      "acceptable_allergens": ["gluten_free", "none"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "16:00", "closes_at": "20:00" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-011",
+    "charity_name": "Camden Foodbank",
+    "location": "51.5388,-0.1417",
+    "contact_email": "info@camden.foodbank.org.uk",
+    "requirements": {
+      "accepted_item_types": ["produce", "canned_goods", "dairy"],
+      "max_capacity_items": 75,
+      "acceptable_allergens": ["nut_free", "soy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "15:45", "closes_at": "19:15" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 5.5 }
+    }
+  },
+  {
+    "charity_id": "CHAR-012",
+    "charity_name": "Tower Hamlets Foodbank",
+    "location": "51.5144,-0.0594",
+    "contact_email": "info@towerhamlets.foodbank.org.uk",
+    "requirements": {
+      "accepted_item_types": ["fresh_produce", "prepared_meal"],
+      "max_capacity_items": 30,
+      "acceptable_allergens": ["dairy_free", "gluten_free"],
+      "storage_capabilities": ["refrigerated"],
+      "operating_hours": { "opens_at": "17:00", "closes_at": "20:30" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 3.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-013",
+    "charity_name": "Greenwich Foodbank",
+    "location": "51.4891,0.0055",
+    "contact_email": "info@greenwich.foodbank.org.uk",
+    "requirements": {
+      "accepted_item_types": ["canned_goods", "vegetarian_meal"],
+      "max_capacity_items": 82,
+      "acceptable_allergens": ["none", "peanut_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "16:00", "closes_at": "20:00" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-014",
+    "charity_name": "Lewisham Foodbank",
+    "location": "51.4452,-0.0135",
+    "contact_email": "info@lewisham.foodbank.org.uk",
+    "requirements": {
+      "accepted_item_types": ["bakery", "fresh_produce", "prepared_meal"],
+      "max_capacity_items": 68,
+      "acceptable_allergens": ["gluten_free", "dairy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "16:30", "closes_at": "20:15" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 4.5 }
+    }
+  },
+  {
+    "charity_id": "CHAR-015",
+    "charity_name": "Wandsworth Foodbank",
+    "location": "51.4568,-0.1912",
+    "contact_email": "info@wandsworth.foodbank.org.uk",
+    "requirements": {
+      "accepted_item_types": ["canned_goods", "dry_goods", "vegetarian_meal"],
+      "max_capacity_items": 90,
+      "acceptable_allergens": ["none", "soy_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "15:00", "closes_at": "19:30" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 6.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-016",
+    "charity_name": "Foodbank WA Perth",
+    "location": "-31.9575,115.9610",
+    "contact_email": "info@foodbankwa.org.au",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "bakery"],
+      "max_capacity_items": 42,
+      "acceptable_allergens": ["dairy_free", "gluten_free"],
+      "storage_capabilities": ["refrigerated"],
+      "operating_hours": { "opens_at": "17:15", "closes_at": "20:45" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-017",
+    "charity_name": "Salvation Army Perth Fortress",
+    "location": "-31.9463,115.8617",
+    "contact_email": "perth.fortress@salvationarmy.org.au",
+    "requirements": {
+      "accepted_item_types": ["produce", "canned_goods", "dry_goods"],
+      "max_capacity_items": 72,
+      "acceptable_allergens": ["none", "peanut_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "15:30", "closes_at": "19:30" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 5.5 }
+    }
+  },
+  {
+    "charity_id": "CHAR-018",
+    "charity_name": "Ruah Engagement Hub",
+    "location": "-31.9472,115.8569",
+    "contact_email": "connecting@ruah.org.au",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "vegetarian_meal"],
+      "max_capacity_items": 55,
+      "acceptable_allergens": ["gluten_free", "dairy_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "16:00", "closes_at": "20:00" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-019",
+    "charity_name": "St Bartholomew’s House Perth",
+    "location": "-31.9567,115.8753",
+    "contact_email": "reception@stbarts.org.au",
+    "requirements": {
+      "accepted_item_types": ["produce", "canned_goods", "bakery"],
+      "max_capacity_items": 83,
+      "acceptable_allergens": ["none", "soy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "15:45", "closes_at": "19:45" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 5.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-020",
+    "charity_name": "Uniting WA Tranby Hub",
+    "location": "-31.9515,115.8661",
+    "contact_email": "tranby@unitingwa.org.au",
+    "requirements": {
+      "accepted_item_types": ["vegetarian_meal", "prepared_meal"],
+      "max_capacity_items": 48,
+      "acceptable_allergens": ["dairy_free", "gluten_free"],
+      "storage_capabilities": ["refrigerated"],
+      "operating_hours": { "opens_at": "16:30", "closes_at": "20:00" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 4.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-021",
+    "charity_name": "Foodbank Victoria",
+    "location": "-37.8282,144.8398",
+    "contact_email": "info@foodbankvictoria.org.au",
+    "requirements": {
+      "accepted_item_types": ["canned_goods", "dry_goods", "produce"],
+      "max_capacity_items": 95,
+      "acceptable_allergens": ["none", "peanut_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "15:00", "closes_at": "18:30" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 7.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-022",
+    "charity_name": "Foodbank NSW & ACT",
+    "location": "-33.7483,150.8443",
+    "contact_email": "office@foodbanknsw.org.au",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "vegetarian_meal", "bakery"],
+      "max_capacity_items": 58,
+      "acceptable_allergens": ["none", "dairy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "16:00", "closes_at": "20:15" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-023",
+    "charity_name": "Foodbank Queensland",
+    "location": "-27.4627,153.0768",
+    "contact_email": "admin@foodbankqld.org.au",
+    "requirements": {
+      "accepted_item_types": ["produce", "canned_goods"],
+      "max_capacity_items": 85,
+      "acceptable_allergens": ["none", "gluten_free", "dairy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "14:30", "closes_at": "19:00" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 5.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-024",
+    "charity_name": "Foodbank South Australia",
+    "location": "-34.9785,138.5721",
+    "contact_email": "reception@foodbanksa.org.au",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "bakery", "vegetarian_meal"],
+      "max_capacity_items": 67,
+      "acceptable_allergens": ["none", "peanut_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "17:00", "closes_at": "20:00" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 6.5 }
+    }
+  },
+  {
+    "charity_id": "CHAR-025",
+    "charity_name": "OzHarvest Sydney",
+    "location": "-33.8967,151.1817",
+    "contact_email": "info@ozharvest.org",
+    "requirements": {
+      "accepted_item_types": ["canned_goods", "dry_goods", "produce"],
+      "max_capacity_items": 88,
+      "acceptable_allergens": ["gluten_free", "dairy_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "16:30", "closes_at": "20:45" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-026",
+    "charity_name": "SecondBite Melbourne",
+    "location": "-37.8105,144.8724",
+    "contact_email": "admin@secondbite.org",
+    "requirements": {
+      "accepted_item_types": ["bakery", "fresh_produce", "prepared_meal"],
+      "max_capacity_items": 52,
+      "acceptable_allergens": ["none", "soy_free"],
+      "storage_capabilities": ["refrigerated"],
+      "operating_hours": { "opens_at": "17:30", "closes_at": "21:00" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 3.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-027",
+    "charity_name": "Anglicare WA East Perth",
+    "location": "-31.9554,115.8712",
+    "contact_email": "info@anglicarewa.org.au",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "vegetarian_meal", "canned_goods"],
+      "max_capacity_items": 63,
+      "acceptable_allergens": ["gluten_free", "dairy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "16:15", "closes_at": "20:15" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 4.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-028",
+    "charity_name": "Vinnies WA Canning Vale",
+    "location": "-32.0835,115.9080",
+    "contact_email": "info@svdpwa.org.au",
+    "requirements": {
+      "accepted_item_types": ["produce", "dry_goods", "bakery"],
+      "max_capacity_items": 92,
+      "acceptable_allergens": ["none", "peanut_free"],
+      "storage_capabilities": ["ambient"],
+      "operating_hours": { "opens_at": "15:30", "closes_at": "19:00" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 6.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-029",
+    "charity_name": "Manna Inc Perth",
+    "location": "-31.9482,115.8714",
+    "contact_email": "admin@manna.org.au",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "vegetarian_meal", "produce"],
+      "max_capacity_items": 57,
+      "acceptable_allergens": ["dairy_free", "gluten_free"],
+      "storage_capabilities": ["refrigerated"],
+      "operating_hours": { "opens_at": "16:45", "closes_at": "20:30" },
+      "transportation": { "can_collect": false, "max_collection_distance_miles": 0.0 }
+    }
+  },
+  {
+    "charity_id": "CHAR-030",
+    "charity_name": "Margaret Court Outreach",
+    "location": "-31.9213,115.9021",
+    "contact_email": "info@mcco.org.au",
+    "requirements": {
+      "accepted_item_types": ["prepared_meal", "bakery", "produce"],
+      "max_capacity_items": 66,
+      "acceptable_allergens": ["none", "soy_free"],
+      "storage_capabilities": ["ambient", "refrigerated"],
+      "operating_hours": { "opens_at": "15:45", "closes_at": "19:45" },
+      "transportation": { "can_collect": true, "max_collection_distance_miles": 5.0 }
+    }
+  }
+]

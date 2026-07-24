@@ -4,9 +4,9 @@ import com.foodflow.agent.CoordinatorAgent;
 import com.foodflow.agent.NegotiationOutcome;
 import com.foodflow.service.DemoDataService;
 import com.foodflow.service.IntakeService;
+import com.foodflow.database.CharityRequestDatabase;
 import com.foodflow.store.AgentMessageStore;
 import com.foodflow.store.AlertStore;
-import com.foodflow.store.CharityRequestStore;
 import com.foodflow.store.DonationStore;
 import com.foodflow.store.DriverStore;
 import com.foodflow.store.IntentStore;
@@ -27,7 +27,7 @@ public class DemoController {
     private final IntakeService intakeService;
     private final CoordinatorAgent coordinatorAgent;
     private final DonationStore donationStore;
-    private final CharityRequestStore charityRequestStore;
+    private final CharityRequestDatabase charityRequestDatabase;
     private final DriverStore driverStore;
     private final RescuePlanStore rescuePlanStore;
     private final AgentMessageStore agentMessageStore;
@@ -36,14 +36,14 @@ public class DemoController {
 
     public DemoController(DemoDataService demoDataService, IntakeService intakeService,
                            CoordinatorAgent coordinatorAgent, DonationStore donationStore,
-                           CharityRequestStore charityRequestStore, DriverStore driverStore,
+                           CharityRequestDatabase charityRequestDatabase, DriverStore driverStore,
                            RescuePlanStore rescuePlanStore, AgentMessageStore agentMessageStore,
                            IntentStore intentStore, AlertStore alertStore) {
         this.demoDataService = demoDataService;
         this.intakeService = intakeService;
         this.coordinatorAgent = coordinatorAgent;
         this.donationStore = donationStore;
-        this.charityRequestStore = charityRequestStore;
+        this.charityRequestDatabase = charityRequestDatabase;
         this.driverStore = driverStore;
         this.rescuePlanStore = rescuePlanStore;
         this.agentMessageStore = agentMessageStore;
@@ -64,7 +64,7 @@ public class DemoController {
     @PostMapping("/reset")
     public Map<String, Object> reset() {
         donationStore.clear();
-        charityRequestStore.clear();
+        charityRequestDatabase.clear();
         driverStore.clear();
         rescuePlanStore.clear();
         agentMessageStore.clear();
@@ -78,7 +78,7 @@ public class DemoController {
     @PostMapping("/unsafe")
     public Map<String, Object> unsafe() {
         donationStore.clear();
-        charityRequestStore.clear();
+        charityRequestDatabase.clear();
         driverStore.clear();
         rescuePlanStore.clear();
         agentMessageStore.clear();
